@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Discord Toggle Channels Bar
 // @namespace    https://discordapp.com
-// @version      1.1.1
+// @version      1.2.0
 // @description  Adds show/hide channels sidebar button to Discord Web App
 // @author       Andy D
 // @match        https://discordapp.com/*
@@ -14,6 +14,7 @@
     const elements = ["toggleChannelsBtn", "channelName-3stJzi"];
     const channelsBar = "channels-Ie2l6A"
     const showHideSidebarButtonParentClass = "scroller-2FKFPG";
+    const roomDivClass = "containerDefault-1ZnADq";
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -62,10 +63,20 @@
         });
     }
 
+    const autohideSidebar = function() {
+        const roomDivs = document.getElementsByClassName(roomDivClass)
+        Array.from(roomDivs).forEach(function(room) {
+            room.addEventListener('click', function() {
+                toggleVisibility();
+            })
+        })
+    }
+
     const main = function() {
         const newBtn = createSidebarButton()
         document.getElementsByClassName(showHideSidebarButtonParentClass)[0].appendChild(newBtn)
         addListenersToElements();
+        autohideSidebar();
     }
 
     pageload();
