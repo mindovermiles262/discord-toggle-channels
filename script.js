@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Discord Toggle Channels Bar
 // @namespace    https://discordapp.com
-// @version      1.0.2
+// @version      1.1.1
 // @description  Adds show/hide channels sidebar button to Discord Web App
 // @author       Andy D
 // @match        https://discordapp.com/*
@@ -11,49 +11,62 @@
 (function() {
     'use strict';
 
-    // Set Variables. Classes must be at position [0]
-    const toggleButtonText = "<< Toggle Channels >>";
-    const toggleButtonParentClass = "scroller-2FKFPG";
-    const channelsBarClass = "channels-Ie2l6A";
-    const channelNameClass = "channelName-3stJzi"
+    const elements = ["toggleChannelsBtn", "channelName-3stJzi"];
+    const channelsBar = "channels-Ie2l6A"
+    const showHideSidebarButtonParentClass = "scroller-2FKFPG";
 
-    // Listen until scroller sidebar is loaded, then add "Toggle Channels" button to sidebar
-    let scrollerInterval = setInterval(function() {
-        if (document.getElementsByClassName(toggleButtonParentClass).length > 0) {
-            let newBtn = document.createElement("p");
-            newBtn.setAttribute("id", "toggleChannelsBtn");
-            newBtn.innerText = toggleButtonText;
-            newBtn.style.color = "white";
-            document.getElementsByClassName(toggleButtonParentClass)[0].appendChild(newBtn);
-            clearInterval(scrollerInterval);
-        }
-    }, 1000)
-
-    // Checks for #toggleChannelsBtn every second, then call triggerListeners() function.
-    let channelsBtnInterval = setInterval(function(){
-        if (document.getElementById("toggleChannelsBtn").innerText.length > 0) {
-            triggerListeners();
-            clearInterval(channelsBtnInterval);
-        }
-    }, 1000)
-
-    // Adds listener to #toggleChannelsBtn, then calls toggleVisibility() when clicked
-    let triggerListeners = function() {
-        document.getElementsByClassName(channelNameClass)[0].addEventListener('click', function() {
-            toggleVisibility();
-        });
-
-        document.getElementById("toggleChannelsBtn").addEventListener('click', function() {
-            toggleVisibility();
-        });
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    let toggleVisibility = function() {
-        let channelsBar = document.getElementsByClassName(channelsBarClass)[0];
-        if (channelsBar.style.display == "none") {
-            channelsBar.style.display = "";
+    async function pageload() {
+        await sleep(5000);
+        main()
+    }
+
+    const toggleVisibility = function() {
+        let sidebar = document.getElementsByClassName(channelsBar)[0];
+        if (sidebar.style.display == "none") {
+            sidebar.style.display = "";
         } else {
-            channelsBar.style.display = "none";
+            sidebar.style.display = "none";
         }
     }
+
+    let cheveronDirection = function() {
+        const sidebar = document.getElementsByClassName(channelsBar)[0]
+        const btn = document.getElementById("toggleChannelsBtn")
+        if (sidebar.style.display == "none") {
+            btn.innerText = "Show >>";
+        } else {
+            btn.innerText = "<< Hide";
+        }
+    }
+
+    const createSidebarButton = function() {
+        let btn = document.createElement("p");
+        btn.setAttribute("class", "toggleChannelsBtn");
+        btn.setAttribute("id", "toggleChannelsBtn");
+        btn.innerText = "<< Hide";
+        btn.style.color = "white";
+        btn.style.textAlign = "center";
+        return btn
+    }
+
+    const addListenersToElements = function() {
+        elements.forEach(function(elem) {
+            document.getElementsByClassName(elem)[0].addEventListener('click', function() {
+                toggleVisibility();
+                cheveronDirection();
+            })
+        });
+    }
+
+    const main = function() {
+        const newBtn = createSidebarButton()
+        document.getElementsByClassName(showHideSidebarButtonParentClass)[0].appendChild(newBtn)
+        addListenersToElements();
+    }
+
+    pageload();
 })();
