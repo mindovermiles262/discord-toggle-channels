@@ -68,6 +68,7 @@
         Array.from(roomDivs).forEach(function(room) {
             room.addEventListener('click', function() {
                 toggleVisibility();
+                cheveronDirection();
             })
         })
     }
