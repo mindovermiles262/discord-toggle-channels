@@ -11,8 +11,8 @@
 (function() {
     'use strict';
 
-    const elements = ["toggleChannelsBtn", "children-19S4PO", "scroller-2FKFPG"];
-    const channelsBar = "channels-Ie2l6A"
+    const toggleButtons = ["children-19S4PO", "scroller-2FKFPG"]; 
+    const columnToHide = "sidebar-2K8pFh"
     const showHideSidebarButtonParentClass = "scroller-2FKFPG";
     const roomDivClass = "containerDefault-1ZnADq";
     const unreadClass = "unread-3zKkbm";
@@ -27,7 +27,7 @@
     }
 
     const toggleVisibility = function() {
-        let sidebar = document.getElementsByClassName(channelsBar)[0];
+        let sidebar = document.getElementsByClassName(columnToHide)[0];
         if (sidebar.style.display == "none") {
             sidebar.style.display = "";
         } else {
@@ -36,12 +36,12 @@
     }
 
     let cheveronDirection = function() {
-        const sidebar = document.getElementsByClassName(channelsBar)[0]
+        const sidebar = document.getElementsByClassName(columnToHide)[0]
         const btn = document.getElementById("toggleChannelsBtn")
         if (sidebar.style.display == "none") {
-            btn.innerText = "Show >>";
+            btn.innerText = "Show";
         } else {
-            btn.innerText = "<< Hide";
+            btn.innerText = "Hide";
         }
     }
 
@@ -49,14 +49,17 @@
         let btn = document.createElement("p");
         btn.setAttribute("class", "toggleChannelsBtn");
         btn.setAttribute("id", "toggleChannelsBtn");
-        btn.innerText = "<< Hide";
-        btn.style.color = "white";
+        btn.innerText = "Hide";
+        btn.style.color = "#43b581"; // Discord Green
+        btn.style.width = "70px" // Buttonbar width
         btn.style.textAlign = "center";
+        btn.style.position = "absolute"
+        btn.style.bottom = "25px"
         return btn
     }
 
-    const addListenersToElements = function() {
-        elements.forEach(function(elem) {
+    const addListenersToToggleButtons = function() {
+        toggleButtons.forEach(function(elem) {
             document.getElementsByClassName(elem)[0].addEventListener('click', function() {
                 toggleVisibility();
                 cheveronDirection();
@@ -79,9 +82,9 @@
         const interval = setInterval(function() {
             const unreads = document.getElementsByClassName(unreadClass).length
             if (unreads > 0) {
-                btn.style.color = "red";
+                btn.style.color = "#f04747"; // Discord Red
             } else {
-                btn.style.color = "white";
+                btn.style.color = "#43b581"; // Discord Green
             }
         }, 1000)
     }
@@ -89,7 +92,7 @@
     const main = function() {
         const newBtn = createSidebarButton()
         document.getElementsByClassName(showHideSidebarButtonParentClass)[0].appendChild(newBtn)
-        addListenersToElements();
+        addListenersToToggleButtons();
         autohideSidebar();
         colorizeButtonIfUnread();
     }
