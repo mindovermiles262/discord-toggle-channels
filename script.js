@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Discord Toggle Channels Bar
 // @namespace    https://discordapp.com
-// @version      1.5.0
+// @version      1.6.0
 // @description  Adds show/hide channels sidebar button to Discord Web App
 // @author       Andy D
-// @match        https://discordapp.com/*
+// @match        https://discord.com/*
 // @grant        none
 // ==/UserScript==
 
