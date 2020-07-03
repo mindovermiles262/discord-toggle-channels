@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Discord Toggle Channels Bar
 // @namespace    https://discordapp.com
-// @version      1.6.0
+// @version      1.7.0
 // @description  Adds show/hide channels sidebar button to Discord Web App
-// @author       Andy D
+// @author       Github mindovermiles262
 // @match        https://discord.com/*
 // @grant        none
 // ==/UserScript==
@@ -11,9 +11,12 @@
 (function() {
     'use strict';
 
-    const toggleButtons = ["children-19S4PO", "scroller-2FKFPG"]; 
+    // Classes of DIVs you want to be able to toggle sidebar 
+    const toggleButtons = [
+        "scroller-2TZvBN",
+    ]; 
     const columnToHide = "sidebar-2K8pFh"
-    const showHideSidebarButtonParentClass = "scroller-2FKFPG";
+    const showHideSidebarButtonParentClass = "scroller-2TZvBN";
     const roomDivClass = "containerDefault-1ZnADq";
     const unreadClass = "unread-3zKkbm";
 
@@ -28,20 +31,20 @@
 
     const toggleVisibility = function() {
         let sidebar = document.getElementsByClassName(columnToHide)[0];
-        if (sidebar.style.display == "none") {
-            sidebar.style.display = "";
+        if (sidebar.style.width == "1px") {
+            sidebar.style.width = "auto";
         } else {
-            sidebar.style.display = "none";
+            sidebar.style.width = "1px";
         }
     }
 
     let cheveronDirection = function() {
         const sidebar = document.getElementsByClassName(columnToHide)[0]
         const btn = document.getElementById("toggleChannelsBtn")
-        if (sidebar.style.display == "none") {
-            btn.innerText = "Show";
+        if (sidebar.style.width == "1px") {
+            btn.innerText = "> > >";
         } else {
-            btn.innerText = "Hide";
+            btn.innerText = "< < <";
         }
     }
 
@@ -49,7 +52,7 @@
         let btn = document.createElement("p");
         btn.setAttribute("class", "toggleChannelsBtn");
         btn.setAttribute("id", "toggleChannelsBtn");
-        btn.innerText = "Hide";
+        btn.innerText = "< < <";
         btn.style.color = "#43b581"; // Discord Green
         btn.style.width = "70px" // Buttonbar width
         btn.style.textAlign = "center";
@@ -90,6 +93,7 @@
     }
 
     const main = function() {
+        console.log("[*] Loading Discord Toggle Channenels Bar Userscript");
         const newBtn = createSidebarButton()
         document.getElementsByClassName(showHideSidebarButtonParentClass)[0].appendChild(newBtn)
         addListenersToToggleButtons();
