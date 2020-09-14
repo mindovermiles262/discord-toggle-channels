@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Discord Toggle Channels Bar
+// @name         Local Discord Toggle Channels Bar
 // @namespace    https://discordapp.com
-// @version      1.8.0
+// @version      1.9.0
 // @description  Adds show/hide channels sidebar button to Discord Web App
 // @author       Github mindovermiles262
 // @match        https://discord.com/*
@@ -13,20 +13,21 @@
 
     // Classes of DIVs you want to be able to toggle sidebar 
     const toggleButtons = [
-        "scroller-2TZvBN",
+        "children-19S4PO",
+        "toggleChannelsBtn"
     ]; 
     const columnToHide = "sidebar-2K8pFh"
     const showHideSidebarButtonParentClass = "scroller-2TZvBN";
     const roomDivClass = "containerDefault-1ZnADq";
     const unreadClass = "unread-3zKkbm";
-    const channelsId = "channels";
-    const channelsWidth = "265px";
+    const channelsWidth = "240px";
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     async function pageload() {
+        // Wait 5 seconds for page to load
         await sleep(5000);
         main()
     }
@@ -34,7 +35,7 @@
     const toggleVisibility = function() {
         let sidebar = document.getElementsByClassName(columnToHide)[0];
         if (sidebar.style.width == "1px") {
-            sidebar.style.width = "auto";
+            sidebar.style.width = channelsWidth;
         } else {
             sidebar.style.width = "1px";
         }
@@ -42,25 +43,31 @@
 
     let cheveronDirection = function() {
         const sidebar = document.getElementsByClassName(columnToHide)[0]
-        const btn = document.getElementById("toggleChannelsBtn")
+        const btn = document.getElementById("dtcb-cheverons")
         if (sidebar.style.width == "1px") {
-            btn.innerText = "> > >";
+            btn.innerText = ">>";
         } else {
-            btn.innerText = "< < <";
+            btn.innerText = "<<";
         }
     }
 
     const createSidebarButton = function() {
-        let btn = document.createElement("p");
-        btn.setAttribute("class", "toggleChannelsBtn");
-        btn.setAttribute("id", "toggleChannelsBtn");
-        btn.innerText = "< < <";
-        btn.style.color = "#43b581"; // Discord Green
-        btn.style.width = "70px" // Buttonbar width
-        btn.style.textAlign = "center";
-        btn.style.position = "absolute"
-        btn.style.bottom = "25px"
-        return btn
+        let btnDiv = document.createElement("div")
+        btnDiv.setAttribute("class", "toggleChannelsBtn")
+        btnDiv.setAttribute("id", "toggleChannelsBtn")
+        btnDiv.style.width = "70px"
+        btnDiv.style.textAlign = "center"
+        btnDiv.style.color = "#43b581" // Discord Green
+        btnDiv.style.position = "absolute"
+        btnDiv.style.bottom = "25px"
+        let btn = document.createElement("p")
+        btn.setAttribute("id", "dtcb-cheverons")
+        btn.innerText = "<<"
+        btn.style.margin = "0"
+        btn.style.fontWeight = "bold"
+        btn.style.fontSize = "200%"
+        btnDiv.appendChild(btn)
+        return btnDiv
     }
 
     const addListenersToToggleButtons = function() {
@@ -70,7 +77,7 @@
                 cheveronDirection();
             })
         });
-    }
+    } 
 
     const autohideSidebar = function() {
         const roomDivs = document.getElementsByClassName(roomDivClass)
@@ -94,21 +101,12 @@
         }, 1000)
     }
 
-    const strictChannelsWidth = function() {
-      // Sets the width of the channels bar to `channelsWidth`
-      // Fixes bug where channels bar would change width based on if an
-      //   overflowing channel name pushed the channel bar to the right.
-      const channelsDiv = document.getElementById(channelsId);
-      channelsDiv.style.width = channelsWidth;
-    }
-
     const main = function() {
         console.log("[*] Loading Discord Toggle Channenels Bar Userscript");
         const newBtn = createSidebarButton()
         document.getElementsByClassName(showHideSidebarButtonParentClass)[0].appendChild(newBtn)
         addListenersToToggleButtons();
         autohideSidebar();
-        strictChannelsWidth();
         colorizeButtonIfUnread();
     }
 
