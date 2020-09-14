@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Discord Toggle Channels Bar
 // @namespace    https://discordapp.com
-// @version      1.7.0
+// @version      1.8.0
 // @description  Adds show/hide channels sidebar button to Discord Web App
 // @author       Github mindovermiles262
 // @match        https://discord.com/*
@@ -19,6 +19,8 @@
     const showHideSidebarButtonParentClass = "scroller-2TZvBN";
     const roomDivClass = "containerDefault-1ZnADq";
     const unreadClass = "unread-3zKkbm";
+    const channelsId = "channels";
+    const channelsWidth = "265px";
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -92,12 +94,21 @@
         }, 1000)
     }
 
+    const strictChannelsWidth = function() {
+      // Sets the width of the channels bar to `channelsWidth`
+      // Fixes bug where channels bar would change width based on if an
+      //   overflowing channel name pushed the channel bar to the right.
+      const channelsDiv = document.getElementById(channelsId);
+      channelsDiv.style.width = channelsWidth;
+    }
+
     const main = function() {
         console.log("[*] Loading Discord Toggle Channenels Bar Userscript");
         const newBtn = createSidebarButton()
         document.getElementsByClassName(showHideSidebarButtonParentClass)[0].appendChild(newBtn)
         addListenersToToggleButtons();
         autohideSidebar();
+        strictChannelsWidth();
         colorizeButtonIfUnread();
     }
 
