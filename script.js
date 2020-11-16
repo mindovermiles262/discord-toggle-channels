@@ -19,7 +19,7 @@
     const columnToHide = "sidebar-2K8pFh"
     const showHideSidebarButtonParentClass = "scroller-2TZvBN";
     const roomDivClass = "containerDefault-1ZnADq";
-    const unreadClass = "unread-3zKkbm";
+    const unreadClass = "unread-2lAfLh";
     const channelsWidth = "240px";
 
     function sleep(ms) {
