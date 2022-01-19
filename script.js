@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Discord Toggle Channels Bar
+// @name         LOCAL Discord
 // @namespace    https://discordapp.com
-// @version      1.11.0
+// @version      1.12.0
 // @description  Adds show/hide channels sidebar button to Discord Web App
 // @author       Github mindovermiles262
 // @match        https://discord.com/*
@@ -13,16 +13,17 @@
 
     // Classes of DIVs you want to be able to toggle sidebar 
     const toggleButtons = [
-        "children-19S4PO",
+        "children-3xh0VB",
         "toggleChannelsBtn"
-    ]; 
-    const columnToHide = "sidebar-2K8pFh"
-    const showHideSidebarButtonParentClass = "scroller-1Bvpku";
-    const roomDivClass = "containerDefault-1ZnADq";
-    const unreadClass = "unread-2lAfLh";
+    ];
+    const columnToHide = "sidebar-1tnWFu"                       // Sidebar column that will be hidden
+    const showHideSidebarButtonParentClass = "scroller-3X7KbA"; // Small sidebar with all your Discords
+    const roomDivClass = "channelName-3KPsGw";                  // The class of the room names, used to autohide sidebar
+    const unreadClass = "unread-36eUEm";                        // Unread messages are assigned a class, used in chevron colorization
     const channelsWidth = "240px";
 
     function sleep(ms) {
+        // Sets timeout for inital page elements to load
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
@@ -33,6 +34,7 @@
     }
 
     const toggleVisibility = function() {
+        // Changes the width of the rooms sidebar
         let sidebar = document.getElementsByClassName(columnToHide)[0];
         if (sidebar.style.width == "1px") {
             sidebar.style.width = channelsWidth;
@@ -80,6 +82,7 @@
     } 
 
     const autohideSidebar = function() {
+      	// Auto-colapses sidebar when you click on a room
         const roomDivs = document.getElementsByClassName(roomDivClass)
         Array.from(roomDivs).forEach(function(room) {
             room.addEventListener('click', function() {
