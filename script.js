@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         LOCAL Discord
+// @name         Discord Toggle
 // @namespace    https://discordapp.com
-// @version      1.12.0
+// @version      1.12.1
 // @description  Adds show/hide channels sidebar button to Discord Web App
 // @author       Github mindovermiles262
 // @match        https://discord.com/*
